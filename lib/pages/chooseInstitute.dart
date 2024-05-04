@@ -72,6 +72,15 @@ class _RelatedFieldsState extends State<RelatedFields> {
             decoration: const InputDecoration(
               label: Text('Location'),
             ),
+            validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(),]),
+            onChanged: (val) {
+                    setState(() {
+                      _ageHasError =
+                          !(_formKey.currentState?.fields['location']?.validate() ??
+                              false);
+                    });
+                  },
             initialValue: city,
             items: cities
                 .map((e) => DropdownMenuItem(
@@ -118,7 +127,10 @@ class _RelatedFieldsState extends State<RelatedFields> {
             onPressed: () {
               _formKey.currentState!.saveAndValidate();
               debugPrint(_formKey.currentState?.instantValue.toString() ?? ''); 
-              Navigator.push(context,MaterialPageRoute(builder: (context) =>const CodePage(title: 'Fields',child: FormOne())));
+              if(_formKey.currentState?.fields['location']?.validate() == true){
+                Navigator.push(context,MaterialPageRoute(builder: (context) =>const CodePage(title: 'Fields',child: FormOne())));
+
+              }
               // Navigator.push(context,MaterialPageRoute(builder: (context) =>const CodePage(title: 'Fields',child: SimpleTextFields())));
             },
           ),
