@@ -1,76 +1,5 @@
+
 import 'package:flutter/material.dart';
-
-class SimpleTextFields extends StatelessWidget {
-  const SimpleTextFields({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 64),
-      children: intersperse(
-        const SizedBox(
-          height: 32,
-        ),
-        [
-          const SimpleTextField(
-            labelText: 'Default Simple TextField',
-          ),
-          const SimpleTextField(
-            hintText: 'Fully Rounded with a Fill',
-            textColor: Colors.white,
-            borderRadius: 1000,
-            fillColor: Colors.purple,
-          ),
-          const SimpleTextField(
-            hintText: 'Floating Label with Accent Color set',
-            labelText: 'Floating Label',
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            textColor: Colors.black,
-            accentColor: Colors.purple,
-          ),
-          const SimpleTextField(
-            labelText: 'With Label Above TextField',
-            showLabelAboveTextField: true,
-            textColor: Colors.black,
-            accentColor: Colors.green,
-          ),
-          SimpleTextField(
-            labelText: 'With Helper Text',
-            helperText: 'I provide a description about this text field',
-            showLabelAboveTextField: true,
-            textColor: Colors.black,
-            accentColor: Colors.red[900],
-          ),
-          Column(
-            children: [
-              const Text(
-                'With Confirmation & Error',
-                style: TextStyle(fontSize: 16),
-              ),
-              SimpleTextField(
-                textEditingController: TextEditingController(text: 'change me'),
-                validator: (val) => val == 'change me',
-              ),
-            ],
-          ),
-          Column(
-            children: const [
-              Text(
-                'With Prefixed Icon',
-                style: TextStyle(fontSize: 16),
-              ),
-              SimpleTextField(
-                hintText: 'Search...',
-                prefixIconData: Icons.search,
-                accentColor: Colors.indigo,
-              ),
-            ],
-          ),
-        ],
-      ).toList(),
-    );
-  }
-}
 
 class SimpleTextField extends StatefulWidget {
   const SimpleTextField(
@@ -329,20 +258,5 @@ class _SimpleTextFieldState extends State<SimpleTextField> {
         ],
       ),
     );
-  }
-}
-
-// Util
-
-// Copied from https://github.com/modulovalue/dart_intersperse/blob/master/lib/src/intersperse.dart
-/// Puts [element] between every element in [list].
-Iterable<T> intersperse<T>(T element, Iterable<T> iterable) sync* {
-  final iterator = iterable.iterator;
-  if (iterator.moveNext()) {
-    yield iterator.current;
-    while (iterator.moveNext()) {
-      yield element;
-      yield iterator.current;
-    }
   }
 }
