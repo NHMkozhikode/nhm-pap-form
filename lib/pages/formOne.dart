@@ -14,9 +14,9 @@ class _FormOneState extends State<FormOne> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool autoValidate = true;
   bool readOnly = false;
-
+  String queryString = '';
+  String eachQuestion = '';
   final List<bool> _questionStates = List.generate(42, (_) => true); // Initialize all states as false
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +44,22 @@ class _FormOneState extends State<FormOne> {
                 onPressed: () {
                   _formKey.currentState!.saveAndValidate();
                   debugPrint(_formKey.currentState?.instantValue.toString() ?? '');
+                  Map<String, dynamic>? formData = _formKey.currentState?.instantValue;
+                  for(int i=0; i< 42;i++){
+                    // debugPrint(formData?["Q$i"]);
+                    eachQuestion = formData?["Q$i"];
+                    debugPrint(queryString  += "?Q$i=$eachQuestion");
+
+                    const String scriptURL  = 'https://script.google.com/macros/s/AKfycbxP1j46urBRkNRjeycLZfKHLpMPE2Xi6NMgP89mOzILjcjLOQUCkcPkL6plQcCUT9k4/exec';
+                    var finalURI   = Uri.parse(scriptURL + queryString);
+                  }
+                  // if(_formKey.currentState!.saveAndValidate() == true){}
+                  // if (formData != null) {
+                  //       String? q0Value = formData["Q0"];
+                  //       String? q1Value = formData["Q1"];
+                  //       debugPrint(q0Value );
+                  //       // Access other field values in a similar way
+                  //     }
                 },
               ),
             ],
@@ -76,6 +92,7 @@ class _FormOneState extends State<FormOne> {
                   _questionStates[i] =
                       !(_formKey.currentState?.fields['Q$i']?.validate() ?? false);
                 });
+                
               },
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(),

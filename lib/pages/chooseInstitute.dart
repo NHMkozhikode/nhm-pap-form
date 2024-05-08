@@ -3,8 +3,6 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:pap_care_management/codepage.dart';
 import 'package:pap_care_management/pages/formOne.dart';
-import 'package:pap_care_management/pages/testForm.dart';
-import 'package:pap_care_management/test.dart';
 
 class RelatedFields extends StatefulWidget {
   const RelatedFields({super.key});
@@ -91,32 +89,32 @@ class _RelatedFieldsState extends State<RelatedFields> {
           ),
           const SizedBox(height: 10),
 
-          FormBuilderTextField(
-                  autovalidateMode: AutovalidateMode.always,
-                  name: "age",
-                  decoration: InputDecoration(
-                    labelText: 'Age',
-                    suffixIcon: _ageHasError
-                        ? const Icon(Icons.error, color: Colors.red)
-                        : const Icon(Icons.check, color: Colors.green),
-                  ),
-                  onChanged: (val) {
-                    setState(() {
-                      _ageHasError =
-                          !(_formKey.currentState?.fields['age']?.validate() ??
-                              false);
-                    });
-                  },
-                  // valueTransformer: (text) => num.tryParse(text),
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(),
-                    FormBuilderValidators.numeric(),
-                    FormBuilderValidators.max(10000),
-                  ]),
-                  // initialValue: '12',
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.next,
-           ),
+          // FormBuilderTextField(
+          //         autovalidateMode: AutovalidateMode.always,
+          //         name: "age",
+          //         decoration: InputDecoration(
+          //           labelText: 'Age',
+          //           suffixIcon: _ageHasError
+          //               ? const Icon(Icons.error, color: Colors.red)
+          //               : const Icon(Icons.check, color: Colors.green),
+          //         ),
+          //         onChanged: (val) {
+          //           setState(() {
+          //             _ageHasError =
+          //                 !(_formKey.currentState?.fields['age']?.validate() ??
+          //                     false);
+          //           });
+          //         },
+          //         // valueTransformer: (text) => num.tryParse(text),
+          //         validator: FormBuilderValidators.compose([
+          //           FormBuilderValidators.required(),
+          //           FormBuilderValidators.numeric(),
+          //           FormBuilderValidators.max(10000),
+          //         ]),
+          //         // initialValue: '12',
+          //         keyboardType: TextInputType.number,
+          //         textInputAction: TextInputAction.next,
+          //  ),
 
           MaterialButton(
             color: Theme.of(context).colorScheme.secondary,
