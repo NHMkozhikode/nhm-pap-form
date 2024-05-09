@@ -4,6 +4,8 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:pap_care_management/confidential.dart';
 import 'package:pap_care_management/styles/questionStyles.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 class FormOne extends StatefulWidget {
   const FormOne({Key? key});
 
@@ -17,6 +19,7 @@ class _FormOneState extends State<FormOne> {
   bool readOnly = false;
   String queryString = '';
   String eachQuestion = '';
+  String firstFormElem ='';
   final List<bool> _questionStates = List.generate(42, (_) => true); // Initialize all states as false
 
   @override
@@ -42,18 +45,32 @@ class _FormOneState extends State<FormOne> {
                   "Submit",
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   _formKey.currentState!.saveAndValidate();
                   debugPrint(_formKey.currentState?.instantValue.toString() ?? '');
                   Map<String, dynamic>? formData = _formKey.currentState?.instantValue;
-                  for(int i=0; i< 42;i++){
+                  for(int i=1; i< 42;i++){
                     // debugPrint(formData?["Q$i"]);
                     eachQuestion = formData?["Q$i"];
-                    debugPrint(queryString  += "?Q$i=$eachQuestion");
-
-                    String scriptURL  = AppScriptString().theAppScriptUrl;
-                    var finalURI   = Uri.parse(scriptURL + queryString);
+                    queryString  += "&Q$i=$eachQuestion";
                   }
+                  // eachQuestion = "?Q1=Rishi&Q2=M&Q3=22";
+
+                  firstFormElem = formData?["Q0"];
+                  String firstElem = "?Q0=$firstFormElem";
+
+                  String scriptURL  = AppScriptString().theAppScriptUrl;
+                  var finalURI   = Uri.parse(scriptURL + firstElem +queryString);
+                  // var finalURI   = Uri.parse(scriptURL + eachQuestion);
+                  var response    = await http.get(finalURI);
+                  debugPrint(finalURI.toString());
+                  queryString = "";
+
+                  if (response.statusCode == 200) {
+                    var bodyR = convert.jsonDecode(response.body);
+                    debugPrint(bodyR.toString());
+                  }
+                    //TODO: put this to appscrpt
                   // if(_formKey.currentState!.saveAndValidate() == true){}
                   // if (formData != null) {
                   //       String? q0Value = formData["Q0"];
