@@ -5,7 +5,9 @@ import 'package:pap_care_management/codepage.dart';
 import 'package:pap_care_management/pages/formOne.dart';
 
 class RelatedFields extends StatefulWidget {
-  const RelatedFields({super.key});
+  const RelatedFields({
+    super.key,
+    });
 
   @override
   State<RelatedFields> createState() => _RelatedFieldsState();
@@ -13,12 +15,13 @@ class RelatedFields extends StatefulWidget {
 
 class _RelatedFieldsState extends State<RelatedFields> {
   final _formKey = GlobalKey<FormBuilderState>();
+  
   bool autoValidate = true;
   bool readOnly = false;
   bool _ageHasError = true;
   String country = '';
   String city = '';
-
+  
   String institutionType = "";
   String chc = ""; 
   
@@ -45,6 +48,7 @@ class _RelatedFieldsState extends State<RelatedFields> {
         children: <Widget>[
           const SizedBox(height: 20),
           FormBuilderDropdown<String>(
+            
             name: 'institution',
             decoration: const InputDecoration(
               label: Text("Institution"),
@@ -66,6 +70,7 @@ class _RelatedFieldsState extends State<RelatedFields> {
           ),
           const SizedBox(height: 10),
           FormBuilderDropdown<String>(
+            
             name: 'location',
             decoration: const InputDecoration(
               label: Text('Location'),
@@ -123,10 +128,13 @@ class _RelatedFieldsState extends State<RelatedFields> {
               style: TextStyle(color: Colors.white),
             ),
             onPressed: () {
+              // final String locationStr ='hgf';
               _formKey.currentState!.saveAndValidate();
               debugPrint(_formKey.currentState?.instantValue.toString() ?? ''); 
+              // Map<String, dynamic>? placeData = _formKey.currentState?.instantValue;
+              // locationStr = placeData?["location"];
               if(_formKey.currentState?.fields['location']?.validate() == true){
-                Navigator.push(context,MaterialPageRoute(builder: (context) =>const CodePage(title: 'Fields',child: FormOne())));
+                Navigator.push(context,MaterialPageRoute(builder: (context) =>const CodePage(title: 'Fields',child: FormOne(selectedInstitution: "suii",selectedLocation: "tft",))));
 
               }
               // Navigator.push(context,MaterialPageRoute(builder: (context) =>const CodePage(title: 'Fields',child: SimpleTextFields())));

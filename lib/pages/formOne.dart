@@ -7,8 +7,17 @@ import 'package:pap_care_management/styles/questionStyles.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 class FormOne extends StatefulWidget {
-  const FormOne({Key? key});
+  final String selectedInstitution;
+  final String selectedLocation;
 
+  // const FormOne({
+  //   super.key,
+  // });
+  const FormOne({
+    super.key,
+    required this.selectedInstitution,
+    required this.selectedLocation,
+  });
   @override
   State<FormOne> createState() => _FormOneState();
 }
@@ -35,6 +44,9 @@ class _FormOneState extends State<FormOne> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              // Container(
+              //   child: Text(widget.message),
+              // ),
               // const SizedBox(height: 20),
               // Generated FormBuilderTextField widgets for questions Q1 to Q11
               ..._buildFormFields(),
@@ -63,7 +75,11 @@ class _FormOneState extends State<FormOne> {
                   var finalURI   = Uri.parse(scriptURL + firstElem +queryString);
                   // var finalURI   = Uri.parse(scriptURL + eachQuestion);
                   var response    = await http.get(finalURI);
+
                   debugPrint(finalURI.toString());
+                  debugPrint(widget.selectedInstitution);
+                  debugPrint(widget.selectedLocation);
+
                   queryString = "";
 
                   if (response.statusCode == 200) {
