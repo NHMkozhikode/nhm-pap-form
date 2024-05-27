@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:pap_care_management/codepage.dart';
 import 'package:pap_care_management/pages/formOne.dart';
+import 'package:pap_care_management/pages/mHospForm.dart';
 
 class RelatedFields extends StatefulWidget {
   const RelatedFields({super.key});
@@ -16,6 +17,8 @@ class _RelatedFieldsState extends State<RelatedFields> {
 
   String selectedInstitution = 'CHC'; // Default selection for institution
   String selectedLocation = ''; // Default selection for location
+
+
 
   // List of institutions and their corresponding locations
   static const Map<String, List<String>> institutionToLocations = {
@@ -72,7 +75,8 @@ class _RelatedFieldsState extends State<RelatedFields> {
             color: Theme.of(context).colorScheme.secondary,
             child: const Text("Submit", style: TextStyle(color: Colors.white)),
             onPressed: () {
-              if (_formKey.currentState?.saveAndValidate() ?? false) {
+              if(selectedInstitution == "CHC"){
+                if (_formKey.currentState?.saveAndValidate() ?? false) {
                 debugPrint(_formKey.currentState?.instantValue.toString() ?? '');
                 Navigator.push(
                   context,
@@ -80,6 +84,17 @@ class _RelatedFieldsState extends State<RelatedFields> {
                   // MaterialPageRoute(builder: (context) => const CodePage(title: 'Fields', child: FormOne(selectedInstitution: "selectedInstitution",selectedLocation: "selectedLocation",)))
                 );
               }
+              } else if(selectedInstitution == "Hospital"){
+                if (_formKey.currentState?.saveAndValidate() ?? false) {
+                debugPrint(_formKey.currentState?.instantValue.toString() ?? '');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CodePage(title: 'Hospital level', child: MajorHospitalForm(selectedInstitution: "selectedInstitution" ,selectedLocation: "selectedLocation",)))
+                  // MaterialPageRoute(builder: (context) => const CodePage(title: 'Fields', child: FormOne(selectedInstitution: "selectedInstitution",selectedLocation: "selectedLocation",)))
+                );
+              }
+              }
+              
             },
           ),
         ],

@@ -27,7 +27,7 @@ class _MajorHospitalFormState extends State<MajorHospitalForm> {
   String queryString = '';
   String eachQuestion = '';
   String firstFormElem ='';
-  final List<bool> _questionStates = List.generate(28, (_) => true); // Initialize all states as false
+  final List<bool> _questionStates = List.generate(27, (_) => true); // Initialize all states as false
  //                                                 ^ chnage the no of qns
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class _MajorHospitalFormState extends State<MajorHospitalForm> {
                   _formKey.currentState!.saveAndValidate();
                   debugPrint(_formKey.currentState?.instantValue.toString() ?? '');
                   Map<String, dynamic>? formData = _formKey.currentState?.instantValue;
-                  for(int i=1; i< 42;i++){
+                  for(int i=1; i< 26;i++){
                     // debugPrint(formData?["Q$i"]);
                     eachQuestion = formData?["Q$i"];
                     queryString  += "&Q$i=$eachQuestion";

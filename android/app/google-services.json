@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "158174064876",
+    "project_id": "nhm-kozhikode",
+    "storage_bucket": "nhm-kozhikode.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:158174064876:android:892935b2a4389cd4e7f5c9",
+        "android_client_info": {
+          "package_name": "com.example.pap_care_management"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwekOuZZffC4i6JVHIrTkfk_TAWu7OcfQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

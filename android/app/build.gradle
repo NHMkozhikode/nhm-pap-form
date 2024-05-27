@@ -1,5 +1,8 @@
 plugins {
     id "com.android.application"
+    // START: FlutterFire Configuration
+    id 'com.google.gms.google-services'
+    // END: FlutterFire Configuration
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
@@ -57,6 +60,16 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
         }
+    }
+    // Added By Rishi, to actually support more systems and not use multidex
+    buildTypes {
+        release {
+             minifyEnabled true
+        }
+        debug{
+            minifyEnabled true
+        }
+        
     }
 }
 
