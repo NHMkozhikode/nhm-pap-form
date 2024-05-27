@@ -6,21 +6,21 @@ import 'package:pap_care_management/styles/questionStyles.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-class FormOne extends StatefulWidget {
+class MajorHospitalForm extends StatefulWidget {
   final String selectedInstitution;
   final String selectedLocation;
 
-  // const FormOne({
+  // const MajorHospitalForm({
   //   super.key,
   // });
 
 
-  const FormOne({Key? key, required this.selectedInstitution, required this.selectedLocation}) : super(key: key);
+  const MajorHospitalForm({Key? key, required this.selectedInstitution, required this.selectedLocation}) : super(key: key);
   @override
-  State<FormOne> createState() => _FormOneState();
+  State<MajorHospitalForm> createState() => _MajorHospitalFormState();
 }
 
-class _FormOneState extends State<FormOne> {
+class _MajorHospitalFormState extends State<MajorHospitalForm> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool autoValidate = true;
   bool readOnly = false;
@@ -196,33 +196,32 @@ class _FormOneState extends State<FormOne> {
 // ] ;
 
 const _questions = [
-"Unit with Trained (BCCPM/10 Days) Charge Medical Office",
-"Unit with Trained (BCCPN/10Days) Charge Nursing Office",
-"New Patients for Follow up in the month",
+"Number of units with trained (BCCPM / 10 days) charge medical officer",
+"Number of units with trained (BCCPN / 10 days) charges Nursing Officer",
+"New Patients of Follow up in the month",
 "No of patients on Follow up at the End of the month",
 "Total no of Home care days",
 "Total No. of Patients Visited by Staff Nurse",
-"No of Home care days of doctor",
-"Total Patients visited with doctor",
+"Total No. of Patients Visited by Doctor",
 "Number of Ascetic tapping at Home",
-"Special O.P Attendance",
+"Special OP attendance",
 "No. of institutions having morphine license",
-"Total number of Patients given Morphine",
-"Number of Catheterization",
-"No. of Patients given Colostomy Materials",
-"Physiotherapy OP Attendance",
-"No. of Health Provisional’s Completed 3 Days Training In this Month",
+"Total number of Patients given morphine",
+"Total No of patients given IP care",
+"Catheterization",
+"No of patients given Colostomy materials",
+"No of Health Professionals completed 3 days training in this month",
 "No. of Nursing Students Completed 3 Days Training in this Month",
-"No. of Colostomy Patients",
-"Parenteral fluid /Medicine",
 "Mouth Care",
+"Parenteral Fluid / Medicine",
 "Wound Care",
 "PRE Enema",
-"Ryle's tube",
-"Tracheotomy",
-"Lymph Edema",
-"Total no of care homes in the secondary area",
-"No of care home visit",
+"Riles tube",
+"Colostomy Care",
+"Tracheotomy Care",
+"Lymph edema",
+"No. of Care Homes in the Secondary Area",
+"No. of Care Homes Visit",
 "Other Innovative Programs"
 ];
 
