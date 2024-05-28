@@ -18,7 +18,8 @@ class _RelatedFieldsState extends State<RelatedFields> {
   String selectedInstitution = 'CHC'; // Default selection for institution
   String selectedLocation = ''; // Default selection for location
 
-
+  static const String preInstitute = "";
+  static const String preLocation = "";
 
   // List of institutions and their corresponding locations
   static const Map<String, List<String>> institutionToLocations = {
@@ -89,7 +90,7 @@ class _RelatedFieldsState extends State<RelatedFields> {
                 debugPrint(_formKey.currentState?.instantValue.toString() ?? '');
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const CodePage(title: 'Hospital level', child: MajorHospitalForm(selectedInstitution: "selectedInstitution" ,selectedLocation: "selectedLocation",)))
+                  MaterialPageRoute(builder: (context) => const CodePage(title: 'Hospital level', child: MajorHospitalForm(selectedInstitution: preInstitute ,selectedLocation: preLocation,)))
                   // MaterialPageRoute(builder: (context) => const CodePage(title: 'Fields', child: FormOne(selectedInstitution: "selectedInstitution",selectedLocation: "selectedLocation",)))
                 );
               }
