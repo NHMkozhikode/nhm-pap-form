@@ -59,7 +59,7 @@ class _FormOneState extends State<FormOne> {
                   _formKey.currentState!.saveAndValidate();
                   debugPrint(_formKey.currentState?.instantValue.toString() ?? '');
                   Map<String, dynamic>? formData = _formKey.currentState?.instantValue;
-                  for(int i=1; i< 42;i++){
+                  for(int i=1; i< 27;i++){
                     // debugPrint(formData?["Q$i"]);
                     eachQuestion = formData?["Q$i"];
                     queryString  += "&Q$i=$eachQuestion";

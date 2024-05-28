@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 
 class questionStyle{
   static const TextStyle question =  TextStyle(
-                            fontSize: 19,
+                            fontSize: 15,
                             // backgroundColor: Colors.black26,
                             // fontWeight: FontWeight.bold,
                             
