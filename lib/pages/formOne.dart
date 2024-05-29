@@ -114,7 +114,6 @@ class _FormOneState extends State<FormOne> {
             FormBuilderTextField(
               autovalidateMode: AutovalidateMode.onUserInteraction,
               name: "Q$i",
-              initialValue: "12",
               decoration: InputDecoration(
                 suffixIcon: _questionStates[i]
                     ? const Icon(Icons.error, color: Colors.red)
