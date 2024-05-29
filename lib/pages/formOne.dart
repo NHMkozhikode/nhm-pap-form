@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -6,6 +7,8 @@ import 'package:pap_care_management/styles/questionStyles.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+
+import 'package:shared_preferences/shared_preferences.dart';
 class FormOne extends StatefulWidget {
   final String selectedInstitution;
   final String selectedLocation;
@@ -22,13 +25,52 @@ class FormOne extends StatefulWidget {
 
 class _FormOneState extends State<FormOne> {
   final _formKey = GlobalKey<FormBuilderState>();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  final db = FirebaseFirestore.instance;
+
+  final city = <String, String>{
+  "CHC": "Los Angeles",
+  "state": "CA",
+  "country": "USA"
+  };
+
   bool autoValidate = true;
   bool readOnly = false;
   String queryString = '';
   String eachQuestion = '';
   String firstFormElem ='';
+
+  late Future<List> instituteLocationList ;
+
   final List<bool> _questionStates = List.generate(28, (_) => true); // Initialize all states as false
  //                                                 ^ chnage the no of qns
+
+
+ Future<List> _instituteLocationSharedPrefReciver()async{
+    // List <String>? _currentInstLocation ;
+    // final SharedPreferences prefs = await _prefs;
+    // // return await prefs.setStringList('currentInstLocatin', <String>[currentInst, currentLocation, ]);
+    // setState(() {
+    //   _currentInstLocation = prefs.getStringList('items');
+    //   debugPrint(_currentInstLocation.toString());
+      
+    // });
+    // return true;
+    String? _institute;
+    String? _location;
+    SharedPreferences prefs = await _prefs;
+    setState(() {
+        _institute = (prefs.getString('Institute') ?? "No data received");
+        _location = (prefs.getString('Location') ?? "No data received");
+        debugPrint(_institute.toString());
+        debugPrint(_location.toString());
+    });
+
+    return [_institute,_location];
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -59,39 +101,24 @@ class _FormOneState extends State<FormOne> {
                   _formKey.currentState!.saveAndValidate();
                   debugPrint(_formKey.currentState?.instantValue.toString() ?? '');
                   Map<String, dynamic>? formData = _formKey.currentState?.instantValue;
-                  for(int i=1; i< 27;i++){
-                    // debugPrint(formData?["Q$i"]);
-                    eachQuestion = formData?["Q$i"];
-                    queryString  += "&Q$i=$eachQuestion";
+
+                  List instituteLocationList = await _instituteLocationSharedPrefReciver();
+                  final quesionsListWithInstituteAndLocation = <String, String>{
+                  "CHC": instituteLocationList[0],
+                  "Institute": instituteLocationList[1],
+                  };
+                  for(int i=0; i< 20; i++){
+                    debugPrint(formData?["Q0"]);
+                    // quesionsListWithInstituteAndLocation['Q$i'] = eachQuestion;
                   }
-                  // eachQuestion = "?Q1=Rishi&Q2=M&Q3=22";
+                  debugPrint(quesionsListWithInstituteAndLocation.toString());
+                  // debugPrint(instituteLocationList[0]);
+                  db.collection(instituteLocationList[0]) // institution
+                    .doc(instituteLocationList[1]) //location
+                    .set(city)
+                    .onError((e, _) => debugPrint("Error writing document: $e"));
 
-                  firstFormElem = formData?["Q0"];
-                  String firstElem = "?Q0=$firstFormElem";
 
-                  String scriptURL  = AppScriptString().theAppScriptUrl;
-                  var finalURI   = Uri.parse(scriptURL + firstElem +queryString);
-                  // var finalURI   = Uri.parse(scriptURL + eachQuestion);
-                  var response    = await http.get(finalURI);
-
-                  debugPrint(finalURI.toString());
-                  debugPrint(widget.selectedInstitution);
-                  debugPrint(widget.selectedLocation);
-
-                  queryString = "";
-
-                  if (response.statusCode == 200) {
-                    var bodyR = convert.jsonDecode(response.body);
-                    debugPrint(bodyR.toString());
-                  }
-                    //TODO(wdas): put this to appscrpt
-                  // if(_formKey.currentState!.saveAndValidate() == true){}
-                  // if (formData != null) {
-                  //       String? q0Value = formData["Q0"];
-                  //       String? q1Value = formData["Q1"];
-                  //       debugPrint(q0Value );
-                  //       // Access other field values in a similar way
-                  //     }
                 },
               ),
             ],
@@ -103,17 +130,20 @@ class _FormOneState extends State<FormOne> {
 
   List<Widget> _buildFormFields() {
     List<Widget> formFields = [];
+    int questionNumbers;
 
     for (int i = 0; i < 27; i++) { // the i repersent the number of questions, chnaege in up too
+      questionNumbers = i+1;
       formFields.add(
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 27),
-            QuestionText(text: _questions[i],questionNumber: i+1,),
+            QuestionText(text: _questions[i],questionNumber: questionNumbers,),
             FormBuilderTextField(
+              initialValue: "12",
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              name: "Q$i",
+              name: "Q$questionNumbers",
               decoration: InputDecoration(
                 suffixIcon: _questionStates[i]
                     ? const Icon(Icons.error, color: Colors.red)
@@ -133,6 +163,7 @@ class _FormOneState extends State<FormOne> {
               ]),
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
+              
             ),
           ],
         ),

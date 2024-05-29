@@ -45,3 +45,6 @@ app.*.map.json
 #for the sheets url
 /lib/confidential.dart
 /lib/firebase_options.dart
+
+#database schema
+database schema.txt

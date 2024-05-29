@@ -7,6 +7,8 @@ import 'package:pap_care_management/styles/questionStyles.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+
+import 'package:shared_preferences/shared_preferences.dart';
 class LsgdForm extends StatefulWidget {
   final String selectedInstitution;
   final String selectedLocation;
@@ -23,12 +25,29 @@ class LsgdForm extends StatefulWidget {
 
 class _LsgdFormState extends State<LsgdForm> {
   final _formKey = GlobalKey<FormBuilderState>();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   bool autoValidate = true;
   bool readOnly = false;
   String queryString = '';
   String eachQuestion = '';
   String firstFormElem ='';
   int counterQuestions = 0;
+
+
+Future<bool> _instituteLocationSharedPrefReciver()async{
+    List currentInstLocation ;
+    final SharedPreferences prefs = await _prefs;
+    // return await prefs.setStringList('currentInstLocatin', <String>[currentInst, currentLocation, ]);
+    setState(() {
+      final List<String>? items = prefs.getStringList('items');
+      debugPrint(items.toString());
+      
+    });
+    return true;
+  }
+
+
   final List<bool> _questionStates = List.generate(_questions.length, (_) => true); // Initialize all states as false
  //                                                 ^ chnage the no of qns
  final List<bool> _questionStates1 = List.generate(_questions1.length, (_) => true); // Initialize all states as false
@@ -78,6 +97,7 @@ class _LsgdFormState extends State<LsgdForm> {
                 ),
                 onPressed: () async {
                   _formKey.currentState!.saveAndValidate();
+                  // _instituteLocationSharedPrefReciver();
                   debugPrint(_formKey.currentState?.instantValue.toString() ?? '');
                   Map<String, dynamic>? formData = _formKey.currentState?.instantValue;
                   for(int i=1; i< 26;i++){

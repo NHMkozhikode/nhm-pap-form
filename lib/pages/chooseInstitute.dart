@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:pap_care_management/codepage.dart';
 import 'package:pap_care_management/pages/formOne.dart';
 import 'package:pap_care_management/pages/lsgdForm.dart';
 import 'package:pap_care_management/pages/mHospForm.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RelatedFields extends StatefulWidget {
   const RelatedFields({super.key});
@@ -15,6 +17,8 @@ class RelatedFields extends StatefulWidget {
 
 class _RelatedFieldsState extends State<RelatedFields> {
   final _formKey = GlobalKey<FormBuilderState>();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
 
   String selectedInstitution = 'CHC'; // Default selection for institution
   String selectedLocation = ''; // Default selection for location
@@ -35,6 +39,21 @@ class _RelatedFieldsState extends State<RelatedFields> {
     ],
 
   };
+
+  Future<bool> _instituteLocationSharedPrefSender(String currentInst, String currentLocation)async{
+    // final SharedPreferences prefs = await _prefs;
+    // final String institute = prefs.getString('institute') ?? "got Null";/
+    // List mainList = [currentInst,]
+    // await prefs.setStringList('currentInstLocatin', <String>[currentInst, currentLocation]);
+    // setState(() {
+    //   debugPrint(currentInst);
+    //   debugPrint(currentLocation);
+    // });
+    SharedPreferences prefs = await _prefs;
+    prefs.setString("Institute", currentInst);
+    prefs.setString("Location", currentLocation);
+    return true;
+  }
 
   @override
   void initState() {
@@ -81,12 +100,16 @@ class _RelatedFieldsState extends State<RelatedFields> {
                 )).toList(),
           ),
           const SizedBox(height: 10),
+
+          //Button
           MaterialButton(
             color: Theme.of(context).colorScheme.secondary,
             child: const Text("Submit", style: TextStyle(color: Colors.white)),
-            onPressed: () {
+            onPressed: () async {
               if(selectedInstitution == "CHC"){
                 if (_formKey.currentState?.saveAndValidate() ?? false) {
+                _instituteLocationSharedPrefSender(selectedInstitution,selectedLocation);
+                 
                 debugPrint(_formKey.currentState?.instantValue.toString() ?? '');
                 Navigator.push(
                   context,
