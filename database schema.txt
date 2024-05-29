@@ -1,0 +1,5 @@
+Collection -> Document -> data
+
+CHC -> chcName -> The questions +chc details
+
+CHClIST -> chc's -> all chc list
