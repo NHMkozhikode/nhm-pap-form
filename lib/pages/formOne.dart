@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:pap_care_management/confidential.dart';
+import 'package:pap_care_management/pages/SuccessPage.dart';
 import 'package:pap_care_management/styles/questionStyles.dart';
 
 import 'package:http/http.dart' as http;
@@ -103,22 +104,32 @@ class _FormOneState extends State<FormOne> {
                   Map<String, dynamic>? formData = _formKey.currentState?.instantValue;
 
                   List instituteLocationList = await _instituteLocationSharedPrefReciver();
-                  final quesionsListWithInstituteAndLocation = <String, String>{
-                  "CHC": instituteLocationList[0],
-                  "Institute": instituteLocationList[1],
+                  final quesionsListWithInstituteAndLocation = {
+                  "Institute": instituteLocationList[0],
+                  "Location": instituteLocationList[1],
+                  "Status": true,
+                  "timestamp": FieldValue.serverTimestamp()
                   };
-                  for(int i=0; i< 20; i++){
-                    debugPrint(formData?["Q0"]);
-                    // quesionsListWithInstituteAndLocation['Q$i'] = eachQuestion;
+
+                  for(int i=1; i< _questions.length; i++){
+                    eachQuestion = formData?["Q$i"];
+                    quesionsListWithInstituteAndLocation['Q$i'] = eachQuestion;
                   }
+
                   debugPrint(quesionsListWithInstituteAndLocation.toString());
                   // debugPrint(instituteLocationList[0]);
                   db.collection(instituteLocationList[0]) // institution
                     .doc(instituteLocationList[1]) //location
-                    .set(city)
+                    .set(quesionsListWithInstituteAndLocation)
                     .onError((e, _) => debugPrint("Error writing document: $e"));
 
-
+                      Navigator.push(
+                      context,
+                      //TODO(Rishi-ks): message
+                      
+                      MaterialPageRoute(builder: (context) => const FormSuccessfullyFinished())
+                      // MaterialPageRoute(builder: (context) => const CodePage(title: 'Fields', child: FormOne(selectedInstitution: "selectedInstitution",selectedLocation: "selectedLocation",)))
+                    );
                 },
               ),
             ],
@@ -132,27 +143,27 @@ class _FormOneState extends State<FormOne> {
     List<Widget> formFields = [];
     int questionNumbers;
 
-    for (int i = 0; i < 27; i++) { // the i repersent the number of questions, chnaege in up too
-      questionNumbers = i+1;
+    for (int j = 0; j < 27; j++) { // the i repersent the number of questions, chnaege in up too
+      questionNumbers = j+1;
       formFields.add(
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 27),
-            QuestionText(text: _questions[i],questionNumber: questionNumbers,),
+            QuestionText(text: _questions[j],questionNumber: questionNumbers,),
             FormBuilderTextField(
-              initialValue: "12",
+              // initialValue: "12",
               autovalidateMode: AutovalidateMode.onUserInteraction,
               name: "Q$questionNumbers",
               decoration: InputDecoration(
-                suffixIcon: _questionStates[i]
+                suffixIcon: _questionStates[j]
                     ? const Icon(Icons.error, color: Colors.red)
                     : const Icon(Icons.check, color: Colors.green),
               ),
               onChanged: (val) {
                 setState(() {
-                  _questionStates[i] =
-                      !(_formKey.currentState?.fields['Q$i']?.validate() ?? false);
+                  _questionStates[j] =
+                      !(_formKey.currentState?.fields['Q$j']?.validate() ?? false);
                 });
                 
               },
