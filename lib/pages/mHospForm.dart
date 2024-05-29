@@ -110,7 +110,7 @@ class _MajorHospitalFormState extends State<MajorHospitalForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 27),
-            QuestionText(text: _questions[i]),
+            QuestionText(text: _questions[i], questionNumber: i+1,),
             FormBuilderTextField(
               autovalidateMode: AutovalidateMode.onUserInteraction,
               name: "Q$i",

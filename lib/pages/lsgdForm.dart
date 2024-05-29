@@ -55,17 +55,21 @@ class _LsgdFormState extends State<LsgdForm> {
               // ),
               // const SizedBox(height: 20),
               // Generated FormBuilderTextField widgets for questions Q1 to Q11
-              const HeadingText(headingText: "Registration & Home Care details "),
+              const HeadingText(headingText: "Registration & Home Care details (20Qns) "),
               ..._buildFormFields(_questions.length, _questions, _questionStates),
               const SizedBox(height: 20,),
+
               const HeadingText(headingText:"Training and number of Participants in Home Care"),
               ..._buildFormFields(_questions1.length, _questions1, _questionStates1),
               const SizedBox(height: 20,),
+
               const HeadingText(headingText:"Services Provided in Home Care"),
               ..._buildFormFields(_questions2.length, _questions2, _questionStates2),
               const SizedBox(height: 20,),
+
               const HeadingText(headingText:"Classification of Patients"),
               ..._buildFormFields(_questions3.length, _questions3, _questionStates3),
+              
               MaterialButton(
                 color: Theme.of(context).colorScheme.secondary,
                 child: const Text(
@@ -127,7 +131,7 @@ class _LsgdFormState extends State<LsgdForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 27),
-            QuestionText(text: questionList[i]),
+            QuestionText(text: questionList[i],questionNumber: i+1,),
             FormBuilderTextField(
               autovalidateMode: AutovalidateMode.onUserInteraction,
               name: "Q$i",
