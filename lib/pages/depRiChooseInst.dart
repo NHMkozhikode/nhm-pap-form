@@ -185,3 +185,20 @@
 // // const _
 
 
+// final institutionToLocations = {
+//                       'CHC': ["CHERUVADI", "CHERUVANNUR", "KODENCHERY", "KODUVALLI", "KOORACHUNDU", "KUNNUMMAL", "MELADY", "MUKKAM", "NARIKUNI", "OLAVANNA", "ORKATERY", "THALAKULATHUR", "THIRUVALLUR", "THIRUVANGOOR", "ULLIYERI", "VALAYAM"],
+//                       'Hospital': ["GGH KOZHIKODE", "TH KOYILANDY", "TH NADAPURAM", "TH KUTTYADI", "TH PERAMBRA", "TH BALUSSERI", "TH THAMARASSERI"],
+//                       'LSGD' : [
+//                       "Arikkulam", "Atholi", "Ayancheri", "Azhiyur", "Balusseri", "Changaroth", "Chathamangalam", "Chekkittapara", "Chekkiyad", "Chelannur", "Chemancheri", "Chengottukave", "Cheruvannur", "Chorode", "Corporation Unit 1", "Corporation Unit 2", "Corporation Unit 3", "Edacheri", "Eramala", "Feroke",
+//                       "Kadalundi", "Kakkodi", "Kakkur", "Karasseri", "Kattippara", "Kavilumpara", "Kayakkodi", "Kayanna", "Keezhariyur", "Kizhakkoth", "Kodancheri", "Kodiyathur", "Koduvalli", "Koodaranhi", "Koorachundu", "Koothali", "Kottur", "Koyilandy Unit 1", "Koyilandy Unit 2", "Kunnamangalam",
+//                       "Kunnummal", "Kuruvattur", "Kuttyadi", "Madavoor", "Maniyur", "Maruthonkara", "Mavoor", "Meppayoor", "Moodadi", "Mukkam", "Nadapuram", "Naduvanur", "Nanminda", "Narikkuni", "Narippatta", "Nochad", "Olavanna Unit 1", "Olavanna Unit 2", "Omassery", "Onchiyam",
+//                       "Panangad Unit 1", "Panangad Unit 2", "Payyoli Unit 1", "Payyoli Unit 2", "Perambra", "Perumanna", "Peruvayal", "Puramery", "Puthuppadi", "Ramanattukara", "Thalakulathur", "Thamarasseri", "Thikkodi", "Thiruvallur", "Thiruvambadi", "Thuneri", "Thurayur", "Ulliyeri", "Unnikulam", "Vadakara Unit 1",
+//                       "Vadakara Unit 2", "Valayam", "Vanimel", "Velom", "Villyapalli"
+//                       ],
+
+//                     };
+
+//                     db.collection("Institutions") // institution
+//                     .doc("Institutions List") //location
+//                     .set(institutionToLocations)
+//                     .onError((e, _) => debugPrint("Error writing document: $e"));

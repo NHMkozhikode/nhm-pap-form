@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -6,6 +8,8 @@ import 'package:pap_care_management/styles/questionStyles.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+
+import 'package:shared_preferences/shared_preferences.dart';
 class FormOne extends StatefulWidget {
   final String selectedInstitution;
   final String selectedLocation;
@@ -22,13 +26,51 @@ class FormOne extends StatefulWidget {
 
 class _FormOneState extends State<FormOne> {
   final _formKey = GlobalKey<FormBuilderState>();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  final db = FirebaseFirestore.instance;
+
+  
   bool autoValidate = true;
   bool readOnly = false;
   String queryString = '';
-  String eachQuestion = '';
+  String? eachQuestion = '';
   String firstFormElem ='';
   final List<bool> _questionStates = List.generate(28, (_) => true); // Initialize all states as false
  //                                                 ^ chnage the no of qns
+
+
+
+ Future<List> _instituteLocationSharedPrefReciver()async{
+    String? _institute;
+    String? _location;
+    SharedPreferences prefs = await _prefs;
+    setState(() {
+        _institute = (prefs.getString('Institute') ?? "No data received");
+        _location = (prefs.getString('Location') ?? "No data received");
+        debugPrint(_institute.toString());
+        debugPrint(_location.toString());
+    });
+
+    return [_institute,_location];
+  }
+
+void _emailCreateUser(String emailAddress, String password)async {
+        try {
+          final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: emailAddress,
+            password: password,
+          );
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'weak-password') {
+            print('The password provided is too weak.');
+          } else if (e.code == 'email-already-in-use') {
+            print('The account already exists for that email.');
+          }
+        } catch (e) {
+          print(e);
+        }
+}
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -59,31 +101,63 @@ class _FormOneState extends State<FormOne> {
                   _formKey.currentState!.saveAndValidate();
                   debugPrint(_formKey.currentState?.instantValue.toString() ?? '');
                   Map<String, dynamic>? formData = _formKey.currentState?.instantValue;
-                  for(int i=1; i< 27;i++){
-                    // debugPrint(formData?["Q$i"]);
+                  List instituteLocationList = await _instituteLocationSharedPrefReciver();
+
+                  final quesionsListWithInstituteAndLocation = {
+                  "Institute": instituteLocationList[0],
+                  "Location": instituteLocationList[1],
+                  "Status": true,
+                  "timestamp": FieldValue.serverTimestamp()
+                  };
+
+                  for(int i=1; i< _questions.length; i++){
                     eachQuestion = formData?["Q$i"];
-                    queryString  += "&Q$i=$eachQuestion";
+                    quesionsListWithInstituteAndLocation['Q$i'] = eachQuestion;
                   }
-                  // eachQuestion = "?Q1=Rishi&Q2=M&Q3=22";
 
-                  firstFormElem = formData?["Q0"];
-                  String firstElem = "?Q0=$firstFormElem";
+                  debugPrint(quesionsListWithInstituteAndLocation.toString());
 
-                  String scriptURL  = AppScriptString().theAppScriptUrl;
-                  var finalURI   = Uri.parse(scriptURL + firstElem +queryString);
-                  // var finalURI   = Uri.parse(scriptURL + eachQuestion);
-                  var response    = await http.get(finalURI);
+                  debugPrint(quesionsListWithInstituteAndLocation.toString());
 
-                  debugPrint(finalURI.toString());
-                  debugPrint(widget.selectedInstitution);
-                  debugPrint(widget.selectedLocation);
+                  db.collection(instituteLocationList[0]) // institution
+                    .doc(instituteLocationList[1]) //location
+                    .set(quesionsListWithInstituteAndLocation)
+                    .onError((e, _) => debugPrint("Error writing document: $e"));
 
-                  queryString = "";
+                  // _emailCreateUser("rishikrishna.sr@gmail.com","qwe123asd");
 
-                  if (response.statusCode == 200) {
-                    var bodyR = convert.jsonDecode(response.body);
-                    debugPrint(bodyR.toString());
-                  }
+                 
+
+
+
+
+                  // for(int i=1; i< 27;i++){
+                  //   // debugPrint(formData?["Q$i"]);
+                  //   eachQuestion = formData?["Q$i"];
+                  //   queryString  += "&Q$i=$eachQuestion";
+                  // }
+                  // // eachQuestion = "?Q1=Rishi&Q2=M&Q3=22";
+
+                  // firstFormElem = formData?["Q0"];
+                  // String firstElem = "?Q0=$firstFormElem";
+
+                  // String scriptURL  = AppScriptString().theAppScriptUrl;
+                  // var finalURI   = Uri.parse(scriptURL + firstElem +queryString);
+                  // // var finalURI   = Uri.parse(scriptURL + eachQuestion);
+                  // var response    = await http.get(finalURI);
+
+                  // debugPrint(finalURI.toString());
+                  // debugPrint(widget.selectedInstitution);
+                  // debugPrint(widget.selectedLocation);
+
+                  // queryString = "";
+
+                  // if (response.statusCode == 200) {
+                  //   var bodyR = convert.jsonDecode(response.body);
+                  //   debugPrint(bodyR.toString());
+                  // }
+
+
                     //TODO(wdas): put this to appscrpt
                   // if(_formKey.currentState!.saveAndValidate() == true){}
                   // if (formData != null) {
