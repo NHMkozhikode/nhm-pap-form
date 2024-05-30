@@ -107,9 +107,10 @@ class _RelatedFieldsState extends State<RelatedFields> {
               } else if(selectedInstitution == "Hospital"){
                 if (_formKey.currentState?.saveAndValidate() ?? false) {
                 debugPrint(_formKey.currentState?.instantValue.toString() ?? '');
+                _instituteLocationSharedPrefSender(selectedInstitution,selectedLocation);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const CodePage(title: 'Hospital level', child: MajorHospitalForm(selectedInstitution: preInstitute ,selectedLocation: preLocation,)))
+                  MaterialPageRoute(builder: (context) => const CodePage(title: 'Hospital level', child: HospitalForm(selectedInstitution: preInstitute ,selectedLocation: preLocation,)))
                   // MaterialPageRoute(builder: (context) => const CodePage(title: 'Fields', child: FormOne(selectedInstitution: "selectedInstitution",selectedLocation: "selectedLocation",)))
                 );
               }

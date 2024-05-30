@@ -36,7 +36,7 @@ class _FormOneState extends State<FormOne> {
   String queryString = '';
   String? eachQuestion = '';
   String firstFormElem ='';
-  final List<bool> _questionStates = List.generate(28, (_) => true); // Initialize all states as false
+  final List<bool> _questionStates = List.generate(_questions.length, (_) => true); // Initialize all states as false
  //                                                 ^ chnage the no of qns
 
 
@@ -61,6 +61,7 @@ void _emailCreateUser(String emailAddress, String password)async {
             email: emailAddress,
             password: password,
           );
+          debugPrint(credential.toString());
         } on FirebaseAuthException catch (e) {
           if (e.code == 'weak-password') {
             print('The password provided is too weak.');
@@ -114,8 +115,6 @@ void _emailCreateUser(String emailAddress, String password)async {
                     eachQuestion = formData?["Q$i"];
                     quesionsListWithInstituteAndLocation['Q$i'] = eachQuestion;
                   }
-
-                  debugPrint(quesionsListWithInstituteAndLocation.toString());
 
                   debugPrint(quesionsListWithInstituteAndLocation.toString());
 
@@ -178,7 +177,7 @@ void _emailCreateUser(String emailAddress, String password)async {
   List<Widget> _buildFormFields() {
     List<Widget> formFields = [];
 
-    for (int i = 0; i < 27; i++) { // the i repersent the number of questions, chnaege in up too
+    for (int i = 0; i < _questions.length; i++) { // the i repersent the number of questions, chnaege in up too
       formFields.add(
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
