@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:pap_care_management/confidential.dart';
-import 'package:pap_care_management/styles/headingStyle.dart';
-import 'package:pap_care_management/styles/questionStyles.dart';
+import 'package:pap_care_management/styles/heading_styles.dart';
+import 'package:pap_care_management/styles/question_style.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;

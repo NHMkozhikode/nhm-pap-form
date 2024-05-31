@@ -3,3 +3,12 @@ Collection -> Document -> data
 CHC -> chcName -> The questions +chc details
 
 CHClIST -> chc's -> all chc list
+
+
+need to add things
+- View the partially filled form if they submit partially and can continue un filled one
+- A pop up showing how much they filled when pressed submit
+- A Finished submitted screen if they completed all questions
+- another option to check if they finished the operation
+- LSGD Have to be done
+- Admin table form for the viewer
