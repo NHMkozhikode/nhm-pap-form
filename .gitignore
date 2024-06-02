@@ -45,4 +45,7 @@ app.*.map.json
 #for the sheets url
 /lib/confidential.dart
 /lib/firebase_options.dart
-/sheetsKeyGcloud/nhm-kozhikode-cd33ade26644.json
+/lib/test_files/
+database schema.txt
+/lib/app_secrets
+/gCloudDetails and schema/

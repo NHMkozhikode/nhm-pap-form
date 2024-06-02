@@ -6,9 +6,19 @@ CHClIST -> chc's -> all chc list
 
 
 need to add things
+
+- LSGD Have to be done
+- Cloud Firestore supports offline data persistence
+- Good looking App bar
+- temporary admin login to see how many institution completed questions
+
 - View the partially filled form if they submit partially and can continue un filled one
 - A pop up showing how much they filled when pressed submit
 - A Finished submitted screen if they completed all questions
 - another option to check if they finished the operation
-- LSGD Have to be done
+
 - Admin table form for the viewer
+- Admin login
+
+- If someone finished the whole form and in the google sheets it should be black lik eth e place should be black suisiusiisus
+- recive the response properly

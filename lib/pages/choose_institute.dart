@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:pap_care_management/codepage.dart';
-import 'package:pap_care_management/pages/chc_form.dart';
-import 'package:pap_care_management/pages/lsgd_form.dart';
-import 'package:pap_care_management/pages/hospital_form.dart';
+import 'package:pap_care_management/app_secrets/codepage.dart';
+import 'package:pap_care_management/pages/form_pages/chc_form.dart';
+import 'package:pap_care_management/pages/form_pages/lsgd_form.dart';
+import 'package:pap_care_management/pages/form_pages/hospital_form.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'form_pages/admin_dashboard.dart';
 
 class RelatedFields extends StatefulWidget {
   const RelatedFields({super.key});
@@ -24,10 +26,12 @@ class _RelatedFieldsState extends State<RelatedFields> {
   static const String preInstitute = "";
   static const String preLocation = "";
 
+  static const Widget sdj = Text("Oiiiii",textAlign: TextAlign.center,style: const TextStyle(color: Colors.amber),);
+
   // List of institutions and their corresponding locations
   static const Map<String, List<String>> institutionToLocations = {
     'CHC': ["CHERUVADI", "CHERUVANNUR", "KODENCHERY", "KODUVALLI", "KOORACHUNDU", "KUNNUMMAL", "MELADY", "MUKKAM", "NARIKUNI", "OLAVANNA", "ORKATERY", "THALAKULATHUR", "THIRUVALLUR", "THIRUVANGOOR", "ULLIYERI", "VALAYAM"],
-    'Hospital': ["GGH KOZHIKODE", "TH KOYILANDY", "TH NADAPURAM", "TH KUTTYADI", "TH PERAMBRA", "TH BALUSSERI", "TH THAMARASSERI"],
+    'Hospital': ["DH VADAKARA","GGH KOZHIKODE", "TH KOYILANDY", "TH NADAPURAM", "TH KUTTYADI", "TH PERAMBRA", "TH BALUSSERI", "TH THAMARASSERI"],
     'LSGD' : [
     "Arikkulam", "Atholi", "Ayancheri", "Azhiyur", "Balusseri", "Changaroth", "Chathamangalam", "Chekkittapara", "Chekkiyad", "Chelannur", "Chemancheri", "Chengottukave", "Cheruvannur", "Chorode", "Corporation Unit 1", "Corporation Unit 2", "Corporation Unit 3", "Edacheri", "Eramala", "Feroke",
     "Kadalundi", "Kakkodi", "Kakkur", "Karasseri", "Kattippara", "Kavilumpara", "Kayakkodi", "Kayanna", "Keezhariyur", "Kizhakkoth", "Kodancheri", "Kodiyathur", "Koduvalli", "Koodaranhi", "Koorachundu", "Koothali", "Kottur", "Koyilandy Unit 1", "Koyilandy Unit 2", "Kunnamangalam",
@@ -120,7 +124,9 @@ class _RelatedFieldsState extends State<RelatedFields> {
                   context,
 
                   
-                  MaterialPageRoute(builder: (context) => const CodePage(title: 'LSGD', child: LsgdForm(selectedInstitution: "selectedInstitution" ,selectedLocation: "selectedLocation",)))
+                  // MaterialPageRoute(builder: (context) => const CodePage(title: 'LSGD', child: LsgdForm(selectedInstitution: "selectedInstitution" ,selectedLocation: "selectedLocation",)))
+                  
+                  MaterialPageRoute(builder: (context) => const ObjectDataTable(columnNames: ["sdfyighl","sfluig","eroiyg"], rowData: [[sdj,sdj,sdj]], constraint: BoxConstraints.expand(),))
                   // MaterialPageRoute(builder: (context) => const CodePage(title: 'Fields', child: FormOne(selectedInstitution: "selectedInstitution",selectedLocation: "selectedLocation",)))
                 );
               }

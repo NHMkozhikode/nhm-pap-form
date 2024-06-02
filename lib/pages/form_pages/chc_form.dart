@@ -3,10 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:pap_care_management/app_secrets/confidential.dart';
 import 'package:pap_care_management/styles/question_style.dart';
 
-// import 'package:http/http.dart' as http;
-// import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 class FormOne extends StatefulWidget {
@@ -52,23 +53,23 @@ class _FormOneState extends State<FormOne> {
     return [_institute,_location];
   }
 
-void _emailCreateUser(String emailAddress, String password)async {
-        try {
-          final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: emailAddress,
-            password: password,
-          );
-          debugPrint(credential.toString());
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'weak-password') {
-            print('The password provided is too weak.');
-          } else if (e.code == 'email-already-in-use') {
-            print('The account already exists for that email.');
+  void _emailCreateUser(String emailAddress, String password)async {
+          try {
+            final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+              email: emailAddress,
+              password: password,
+            );
+            debugPrint(credential.toString());
+          } on FirebaseAuthException catch (e) {
+            if (e.code == 'weak-password') {
+              print('The password provided is too weak.');
+            } else if (e.code == 'email-already-in-use') {
+              print('The account already exists for that email.');
+            }
+          } catch (e) {
+            print(e);
           }
-        } catch (e) {
-          print(e);
-        }
-}
+  }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -108,7 +109,7 @@ void _emailCreateUser(String emailAddress, String password)async {
                   "timestamp": FieldValue.serverTimestamp()
                   };
 
-                  for(int i=1; i< _questions.length; i++){
+                  for(int i=0; i< _questions.length; i++){
                     eachQuestion = formData?["Q$i"];
                     quesionsListWithInstituteAndLocation['Q$i'] = eachQuestion;
                   }
@@ -120,6 +121,8 @@ void _emailCreateUser(String emailAddress, String password)async {
                     .set(quesionsListWithInstituteAndLocation)
                     .onError((e, _) => debugPrint("Error writing document: $e"));
 
+
+                  sendRequest('function1');
                   // _emailCreateUser("rishikrishna.sr@gmail.com","qwe123asd");
 
                  
@@ -173,7 +176,8 @@ void _emailCreateUser(String emailAddress, String password)async {
 
   List<Widget> _buildFormFields() {
     List<Widget> formFields = [];
-
+    debugPrint("Number opf qns");
+    debugPrint(_questions.length.toString());
     for (int i = 0; i < _questions.length; i++) { // the i repersent the number of questions, chnaege in up too
       formFields.add(
         Column(
@@ -211,6 +215,22 @@ void _emailCreateUser(String emailAddress, String password)async {
 
     return formFields;
   }
+
+  void sendRequest(String action) async {
+    String url = AppScriptString().theAppScriptUrl;
+
+    final response = await http.get(Uri.parse('$url?action=$action'));
+
+    if (response.statusCode == 200) {
+      // var responseBody = json.decode(response.body);
+      // var responseBody = jsonDecode(response.body);
+      // debugPrint('Response: $responseBody');
+      debugPrint("Work AAAyi mwonnee");
+    } else {
+      debugPrint('Request failed with status: ${response.statusCode}.');
+    }
+  }
+
 
 }
 

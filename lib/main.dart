@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter/painting.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:pap_care_management/codepage.dart';
+import 'package:pap_care_management/app_secrets/codepage.dart';
 import 'package:pap_care_management/pages/choose_institute.dart';
 // import 'package:pap_care_management/pages/formOne.dart';
 // import 'package:pap_care_management/test.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import "package:firebase_core/firebase_core.dart";
-import 'firebase_options.dart';
+import 'app_secrets/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -40,7 +40,7 @@ class _HospitalFormState extends State<HospitalForm> {
 
 
 
- Future<List> _instituteLocationSharedPrefReciver()async{
+  Future<List> _instituteLocationSharedPrefReciver()async{
     String? _institute;
     String? _location;
     SharedPreferences prefs = await _prefs;
@@ -53,6 +53,21 @@ class _HospitalFormState extends State<HospitalForm> {
 
     return [_institute,_location];
   }
+
+  Future <int> _addingDataToFirebase( List<dynamic> instituteLocationListMain, Map <String,dynamic> quesionsListWithInstituteAndLocation)async {
+      try{
+        db.collection(instituteLocationListMain[0]) // institution
+        .doc(instituteLocationListMain[1]) //location
+        .set(quesionsListWithInstituteAndLocation);
+        return 1;
+      } catch(e){
+        debugPrint("Error writing document: $e");
+        return 0; // failure
+      }     
+      // .onError((e, _) => debugPrint("Error writing document: $e"));
+  }
+
+
 
 void _emailCreateUser(String emailAddress, String password)async {
         try {
@@ -117,11 +132,11 @@ void _emailCreateUser(String emailAddress, String password)async {
 
                   debugPrint(quesionsListWithInstituteAndLocation.toString());
 
-                  db.collection(instituteLocationList[0]) // institution
-                    .doc(instituteLocationList[1]) //location
-                    .set(quesionsListWithInstituteAndLocation)
-                    .onError((e, _) => debugPrint("Error writing document: $e"));
-
+                  // db.collection(instituteLocationList[0]) // institution
+                  //   .doc(instituteLocationList[1]) //location
+                  //   .set(quesionsListWithInstituteAndLocation)
+                  //   .onError((e, _) => debugPrint("Error writing document: $e"));
+                  _addingDataToFirebase(instituteLocationList, quesionsListWithInstituteAndLocation);
                   // _emailCreateUser("rishikrishna.sr@gmail.com","qwe123asd");
 
                  
@@ -298,5 +313,8 @@ const _questions = [
 ];
 
  // Initialize all states as false
+
+
+
 
 
