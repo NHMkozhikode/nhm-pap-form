@@ -46,7 +46,7 @@ dependencies:
   cloud_firestore: ^4.17.4
   shared_preferences: ^2.2.3
   firebase_auth: ^4.20.0
-
+  easy_loading_button: ^0.3.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
