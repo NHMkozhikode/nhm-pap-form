@@ -4,7 +4,8 @@ CHC -> chcName -> The questions +chc details
 
 CHClIST -> chc's -> all chc list
 
-
+flutter pub run rename_app:main all="NHM KKD Reporting"
+flutter pub run flutter_launcher_icons -f flutter_launcher_icons.yaml
 need to add things
 
 - LSGD Have to be done
@@ -20,5 +21,10 @@ need to add things
 - Admin table form for the viewer
 - Admin login
 
-- If someone finished the whole form and in the google sheets it should be black lik eth e place should be black suisiusiisus
+- (Done)If someone finished the whole form and in the google sheets it should be black lik eth e place should be black suisiusiisus
 - recive the response properly
+- (Bug) when one partially fille dthe form and wanted to 
+- (Bug) The red indicator will stay red even though the app is updated
+- (Bug) If i delete an element in App Script the boldness still present
+
+- (Feature/bug) I want to update the data in google sheets when there is no internet so it is kinnda like firestore

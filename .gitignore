@@ -49,3 +49,5 @@ app.*.map.json
 database schema.txt
 /lib/app_secrets
 /gCloudDetails and schema/
+/assets/
+/android/key.properties

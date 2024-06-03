@@ -3,7 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:pap_care_management/app_secrets/codepage.dart';
 import 'package:pap_care_management/pages/form_pages/chc_form.dart';
-import 'package:pap_care_management/pages/form_pages/lsgd_form.dart';
+// import 'package:pap_care_management/pages/form_pages/lsgd_form.dart';
 import 'package:pap_care_management/pages/form_pages/hospital_form.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,9 +22,6 @@ class _RelatedFieldsState extends State<RelatedFields> {
 
   String selectedInstitution = 'CHC'; // Default selection for institution
   String selectedLocation = ''; // Default selection for location
-
-  static const String preInstitute = "";
-  static const String preLocation = "";
 
   static const Widget sdj = Text("Oiiiii",textAlign: TextAlign.center,style: const TextStyle(color: Colors.amber),);
 
@@ -113,7 +110,7 @@ class _RelatedFieldsState extends State<RelatedFields> {
                 _instituteLocationSharedPrefSender(selectedInstitution,selectedLocation);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const CodePage(title: 'Hospital level', child: HospitalForm(selectedInstitution: preInstitute ,selectedLocation: preLocation,)))
+                  MaterialPageRoute(builder: (context) => const CodePage(title: 'Hospital level', child: HospitalForm()))
                   // MaterialPageRoute(builder: (context) => const CodePage(title: 'Fields', child: FormOne(selectedInstitution: "selectedInstitution",selectedLocation: "selectedLocation",)))
                 );
               }

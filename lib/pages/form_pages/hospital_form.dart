@@ -1,24 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:pap_care_management/app_secrets/confidential.dart';
 import 'package:pap_care_management/styles/question_style.dart';
 
-// import 'package:http/http.dart' as http;
-// import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+// import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 class HospitalForm extends StatefulWidget {
-  final String selectedInstitution;
-  final String selectedLocation;
 
-  // const HospitalForm({
-  //   super.key,
-  // });
-
-
-  const HospitalForm({Key? key, required this.selectedInstitution, required this.selectedLocation}) : super(key: key);
+  const HospitalForm({Key? key}) : super(key: key);
   @override
   State<HospitalForm> createState() => _HospitalFormState();
 }
@@ -35,57 +29,53 @@ class _HospitalFormState extends State<HospitalForm> {
   String queryString = '';
   String? eachQuestion = '';
   String firstFormElem ='';
+  final List<FocusNode> _focusNodes = List.generate(_questions.length, (_) => FocusNode());
   final List<bool> _questionStates = List.generate(_questions.length, (_) => true); // Initialize all states as false
  //                                                 ^ chnage the no of qns
 
+  // late Future<List> instituteAndLocationGlobal;
+  late Future<List<dynamic>> instituteAndLocationGlobal ;
 
+@override
+  void initState() {
+    super.initState();
+    instituteAndLocationGlobal = _instituteLocationSharedPrefReciver();
+
+    // Print the data once it is retrieved
+    instituteAndLocationGlobal.then((data) {
+      String? institute = data[0] as String?;
+      String? location = data[1] as String?;
+      debugPrint('Institute: $institute');
+      debugPrint('Location: $location');
+    });
+  }
 
   Future<List> _instituteLocationSharedPrefReciver()async{
     String? _institute;
-    String? _location;
     SharedPreferences prefs = await _prefs;
+    String? _location;
     setState(() {
         _institute = (prefs.getString('Institute') ?? "No data received");
         _location = (prefs.getString('Location') ?? "No data received");
-        debugPrint(_institute.toString());
-        debugPrint(_location.toString());
+        // debugPrint(_institute.toString());
+        // debugPrint(_location.toString());
     });
 
     return [_institute,_location];
   }
 
   Future <int> _addingDataToFirebase( List<dynamic> instituteLocationListMain, Map <String,dynamic> quesionsListWithInstituteAndLocation)async {
-      try{
-        db.collection(instituteLocationListMain[0]) // institution
-        .doc(instituteLocationListMain[1]) //location
-        .set(quesionsListWithInstituteAndLocation);
-        return 1;
-      } catch(e){
-        debugPrint("Error writing document: $e");
-        return 0; // failure
-      }     
-      // .onError((e, _) => debugPrint("Error writing document: $e"));
+    try{
+      db.collection(instituteLocationListMain[0]) // institution
+      .doc(instituteLocationListMain[1]) //location
+      .set(quesionsListWithInstituteAndLocation);
+      return 1;
+    } catch(e){
+      debugPrint("Error writing document: $e");
+      return 0; // failure
+    }     
+    // .onError((e, _) => debugPrint("Error writing document: $e"));
   }
-
-
-
-void _emailCreateUser(String emailAddress, String password)async {
-        try {
-          final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: emailAddress,
-            password: password,
-          );
-          debugPrint(credential.toString());
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'weak-password') {
-            print('The password provided is too weak.');
-          } else if (e.code == 'email-already-in-use') {
-            print('The account already exists for that email.');
-          }
-        } catch (e) {
-          print(e);
-        }
-}
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -97,7 +87,8 @@ void _emailCreateUser(String emailAddress, String password)async {
           },
           autovalidateMode: AutovalidateMode.disabled,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisAlignment: MainAxisAlignment.spaceAround ,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               // Container(
               //   child: Text(widget.message),
@@ -105,14 +96,29 @@ void _emailCreateUser(String emailAddress, String password)async {
               // const SizedBox(height: 20),
               // Generated FormBuilderTextField widgets for questions Q1 to Q11
               ..._buildFormFields(),
-              
-              MaterialButton(
-                color: Theme.of(context).colorScheme.secondary,
-                child: const Text(
-                  "Submit",
-                  style: TextStyle(color: Colors.white),
+              const SizedBox(height: 24,),
+              EasyButton(
+              idleStateWidget: const Text(
+                'Submit',
+                style: TextStyle(
+                  color: Colors.white,
                 ),
-                onPressed: () async {
+              ),
+              loadingStateWidget: const CircularProgressIndicator(
+                strokeWidth: 3.0,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  Colors.white,
+                ),
+              ),
+              useWidthAnimation: true,
+              useEqualLoadingStateWidgetDimension: true,
+              width: 150.0,
+              height: 40.0,
+              borderRadius: 4.0,
+              contentGap: 6.0,
+              buttonColor: Colors.blueAccent,
+              onPressed: ()async{
+                  await Future.delayed(const Duration(milliseconds: 3000), () => 42);
                   _formKey.currentState!.saveAndValidate();
                   debugPrint(_formKey.currentState?.instantValue.toString() ?? '');
                   Map<String, dynamic>? formData = _formKey.currentState?.instantValue;
@@ -125,62 +131,20 @@ void _emailCreateUser(String emailAddress, String password)async {
                   "timestamp": FieldValue.serverTimestamp()
                   };
 
-                  for(int i=1; i< _questions.length; i++){
+                  for(int i=0; i< _questions.length; i++){
                     eachQuestion = formData?["Q$i"];
-                    quesionsListWithInstituteAndLocation['Q$i'] = eachQuestion;
+                    if(eachQuestion != null){
+                      quesionsListWithInstituteAndLocation['Q$i'] = eachQuestion! ;
+                    }else{
+                      quesionsListWithInstituteAndLocation['Q$i'] = "";
+                    }
                   }
 
                   debugPrint(quesionsListWithInstituteAndLocation.toString());
-
-                  // db.collection(instituteLocationList[0]) // institution
-                  //   .doc(instituteLocationList[1]) //location
-                  //   .set(quesionsListWithInstituteAndLocation)
-                  //   .onError((e, _) => debugPrint("Error writing document: $e"));
                   _addingDataToFirebase(instituteLocationList, quesionsListWithInstituteAndLocation);
-                  // _emailCreateUser("rishikrishna.sr@gmail.com","qwe123asd");
-
-                 
-
-
-
-
-                  // for(int i=1; i< 27;i++){
-                  //   // debugPrint(formData?["Q$i"]);
-                  //   eachQuestion = formData?["Q$i"];
-                  //   queryString  += "&Q$i=$eachQuestion";
-                  // }
-                  // // eachQuestion = "?Q1=Rishi&Q2=M&Q3=22";
-
-                  // firstFormElem = formData?["Q0"];
-                  // String firstElem = "?Q0=$firstFormElem";
-
-                  // String scriptURL  = AppScriptString().theAppScriptUrl;
-                  // var finalURI   = Uri.parse(scriptURL + firstElem +queryString);
-                  // // var finalURI   = Uri.parse(scriptURL + eachQuestion);
-                  // var response    = await http.get(finalURI);
-
-                  // debugPrint(finalURI.toString());
-                  // debugPrint(widget.selectedInstitution);
-                  // debugPrint(widget.selectedLocation);
-
-                  // queryString = "";
-
-                  // if (response.statusCode == 200) {
-                  //   var bodyR = convert.jsonDecode(response.body);
-                  //   debugPrint(bodyR.toString());
-                  // }
-
-
-                    //TODO(wdas): put this to appscrpt
-                  // if(_formKey.currentState!.saveAndValidate() == true){}
-                  // if (formData != null) {
-                  //       String? q0Value = formData["Q0"];
-                  //       String? q1Value = formData["Q1"];
-                  //       debugPrint(q0Value );
-                  //       // Access other field values in a similar way
-                  //     }
+                  sendRequest('function2');
                 },
-              ),
+            ),
             ],
           ),
         ),
@@ -190,98 +154,94 @@ void _emailCreateUser(String emailAddress, String password)async {
 
   List<Widget> _buildFormFields() {
     List<Widget> formFields = [];
-
-    for (int i = 0; i < _questions.length; i++) { // the i repersent the number of questions, chnaege in up too
+    // debugPrint("Number of questions");
+    // debugPrint(_questions.length.toString());
+    for (int i = 0; i < _questions.length; i++) {
       formFields.add(
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 27),
-            QuestionText(text: _questions[i],questionNumber: i+1,),
-            FormBuilderTextField(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              name: "Q$i",
-              decoration: InputDecoration(
-                suffixIcon: _questionStates[i]
-                    ? const Icon(Icons.error, color: Colors.red)
-                    : const Icon(Icons.check, color: Colors.green),
-              ),
-              onChanged: (val) {
-                setState(() {
-                  _questionStates[i] =
-                      !(_formKey.currentState?.fields['Q$i']?.validate() ?? false);
-                });
-                
+            QuestionText(text: _questions[i], questionNumber: i + 1,),
+            FutureBuilder<List>(
+              future: instituteAndLocationGlobal,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return CircularProgressIndicator(); // or a placeholder widget
+                }
+                String? institute = snapshot.data![0] as String?;
+                String? location = snapshot.data![1] as String?;
+                // debugPrint('Institute: $institute');
+                // debugPrint('Location: $location');
+                return StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance.collection(institute!).doc(location!).snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return CircularProgressIndicator(); // or a placeholder widget
+                    }
+                    final data = snapshot.data?.data() as Map<String, dynamic>?;
+                    return FormBuilderTextField(
+                      autovalidateMode: AutovalidateMode.disabled,
+                      initialValue: data?['Q$i']?.toString() ?? '',
+                      focusNode: _focusNodes[i],
+                      name: "Q$i",
+                      decoration: InputDecoration(
+                        suffixIcon: _questionStates[i]
+                            ? const Icon(Icons.error, color: Colors.red)
+                            : const Icon(Icons.check, color: Colors.green),
+                      ),
+                      onChanged: (val) {
+                        setState(() {
+                          _questionStates[i] =
+                              !(_formKey.currentState?.fields['Q$i']?.validate() ?? false);
+                        });
+                      },
+                      validator: FormBuilderValidators.compose([
+                        // FormBuilderValidators.required(),
+                        FormBuilderValidators.numeric(),
+                        FormBuilderValidators.max(10000),
+                      ]),
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      onEditingComplete: () {
+                        if (i + 1 < _questions.length) {
+                          FocusScope.of(context).requestFocus(_focusNodes[i + 1]);
+                        } else {
+                          FocusScope.of(context).unfocus();
+                        }
+                      },
+                    );
+                  },
+                );
               },
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(),
-                FormBuilderValidators.numeric(),
-                FormBuilderValidators.max(10000),
-              ]),
-              keyboardType: TextInputType.number,
-              textInputAction: TextInputAction.next,
             ),
           ],
         ),
       );
     }
-
     return formFields;
   }
 
+
+  Future<int> sendRequest(String action) async {
+    String url = AppScriptString().theAppScriptUrl;
+
+    final response = await http.get(Uri.parse('$url?action=$action'));
+
+    if (response.statusCode == 200) {
+      // var responseBody = json.decode(response.body);
+      // var responseBody = jsonDecode(response.body);
+      // debugPrint('Response: $responseBody');
+      debugPrint("Work AAAyi mwonnee");
+      return 1;
+    } else {
+      debugPrint('Request failed with status: ${response.statusCode}.');
+      return 0;
+    }
+  }
+
+
 }
-
-// const _questions = [
-//   "Total No. of Bed Bound Patients in Last Month",
-//   "New Bed Bound Patients",
-//   "Expired or Transfer out Case",
-//   "Total no. of Bed Bound Patients",
-//   "Total No. of Home Care Days",
-//   "No of Bed Bound Patients Visited in this month ",
-
-//   "Total No of Patients Visited in this month",
-//   "No of Patients Seen by the Doctor - MM",
-//   "No of Patients Seen by the Physiotherapist ",
-//   "New Home Bound and Chronic illness Patients With SHS",
-//   "Total No .of Home Bound and Chronic Illness Patients With SHS",
-//   "No of Home Bound & Chronic Illness with SHS given Priority  Visit from JAK",
-
-//   "Total Patients on Follow-up Care ",
-//   "How many Volunteers where linked to Patients ",
-//   "No of Volunteers Completed 3 Days Training So far  within your LSGD",
-//   "No of Volunteers Completed 3 Days Training in this Month   Within your LSGD",
-//   "Number of Patients Seen by the  Doctor ISM",
-//   "Number of Patients Seen by the  Doctor Homoeo",
-
-//   "Number of LSGDI's Members attend Home care",
-//   "Number of Health Staff attend Home care",
-//   "Number of ASHA Workers attend Home care",
-//   "Number of Community Volunteers attend Home care",
-//   "Bath",
-//   "Mouth Care",
-
-//   "Catheterization",
-//   "No of indwelling catheter",
-//   "Bladder wash",
-//   "Wound dressing",
-//   "PRE Enema",
-//   "Cancer",
-  
-//   "CKD Patients",
-//   " Dialysis Patient",
-//   "Paraplegia +Quadriplegia",
-//   "Hemi Plegia",
-//   "Riles tube",
-//   "Colostomy",
-
-//   "Tracheotomy",
-//   "Lymphedema",
-//   "0-18 year",
-//   "18-60 Year",
-//   ">60 yrs",
-//   "No. of Patients taking Morphine",
-// ] ;
-
 const _questions = [
 "Number of units with trained (BCCPM / 10 days) charge medical officer",
 "Number of units with trained (BCCPN / 10 days) charges Nursing Officer",
