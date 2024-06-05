@@ -26,5 +26,20 @@ need to add things
 - (Bug) when one partially fille dthe form and wanted to 
 - (Bug) The red indicator will stay red even though the app is updated
 - (Bug) If i delete an element in App Script the boldness still present
+- (Bug) IN the case of offline persistence, the app shows the previous data eventhough the document is deleted
 
 - (Feature/bug) I want to update the data in google sheets when there is no internet so it is kinnda like firestore
+
+
+
+Keystore Generation
+https://stackoverflow.com/questions/55536637/how-to-build-signed-apk-from-android-studio-for-flutter
+For winodws:
+keytool -genkey -v -keystore c:\Users\USER_NAME\upload-keystore.jks -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+then:
+https://medium.com/@psyanite/how-to-sign-and-release-your-flutter-app-ed5e9531c2ac
+https://docs.flutter.dev/deployment/android#reference-the-keystore-from-the-app
+
+
+if install adb app package
+https://www.reddit.com/r/androidapps/comments/u9drlb/i_want_to_install_an_apk_but_it_shows_app_not/
