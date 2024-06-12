@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:pap_care_management/app_secrets/codepage.dart';
+import 'package:pap_care_management/pages/coming_soon_page.dart';
 import 'package:pap_care_management/pages/form_pages/chc_form.dart';
 // import 'package:pap_care_management/pages/form_pages/lsgd_form.dart';
 import 'package:pap_care_management/pages/form_pages/hospital_form.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'form_pages/admin_dashboard.dart';
+// import 'form_pages/admin_dashboard.dart';
 
 class RelatedFields extends StatefulWidget {
   const RelatedFields({super.key});
@@ -23,7 +24,7 @@ class _RelatedFieldsState extends State<RelatedFields> {
   String selectedInstitution = 'CHC'; // Default selection for institution
   String selectedLocation = ''; // Default selection for location
 
-  static const Widget sdj = Text("Oiiiii",textAlign: TextAlign.center,style: const TextStyle(color: Colors.amber),);
+  // static const Widget sdj = Text("Oiiiii",textAlign: TextAlign.center,style: const TextStyle(color: Colors.amber),);
 
   // List of institutions and their corresponding locations
   static const Map<String, List<String>> institutionToLocations = {
@@ -121,9 +122,9 @@ class _RelatedFieldsState extends State<RelatedFields> {
                   context,
 
                   
-                  // MaterialPageRoute(builder: (context) => const CodePage(title: 'LSGD', child: LsgdForm(selectedInstitution: "selectedInstitution" ,selectedLocation: "selectedLocation",)))
+                  MaterialPageRoute(builder: (context) => const ComingSoonPage())
                   
-                  MaterialPageRoute(builder: (context) => const ObjectDataTable(columnNames: ["sdfyighl","sfluig","eroiyg"], rowData: [[sdj,sdj,sdj]], constraint: BoxConstraints.expand(),))
+                  // MaterialPageRoute(builder: (context) => const ObjectDataTable(columnNames: ["sdfyighl","sfluig","eroiyg"], rowData: [[sdj,sdj,sdj]], constraint: BoxConstraints.expand(),))
                   // MaterialPageRoute(builder: (context) => const CodePage(title: 'Fields', child: FormOne(selectedInstitution: "selectedInstitution",selectedLocation: "selectedLocation",)))
                 );
               }
