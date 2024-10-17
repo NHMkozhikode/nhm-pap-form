@@ -6,11 +6,10 @@ class ObjectDataTable extends StatelessWidget {
   final List<List<Widget>> rowData;
   final BoxConstraints constraint;
   const ObjectDataTable(
-      {Key? key,
+      {super.key,
       required this.constraint,
       required this.rowData,
-      required this.columnNames})
-      : super(key: key);
+      required this.columnNames});
 
   @override
   Widget build(BuildContext context) {
@@ -73,15 +72,14 @@ class CustomCell extends StatelessWidget {
   final bool isHeader;
 
   const CustomCell(
-      {Key? key,
+      {super.key,
       this.isHeader=false,  
       required this.width,
       required this.columnCnt,
       this.color,
       this.child,
       this.start = false,
-      this.end = false})
-      : super(key: key);
+      this.end = false});
 
   BorderRadius getBorderRadius() {
     BorderRadius borderRadius = BorderRadius.zero;

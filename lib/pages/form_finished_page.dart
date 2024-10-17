@@ -11,12 +11,12 @@ class _FormSuccessfullyFinishedState extends State<FormSuccessfullyFinished> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("data"),),
+      appBar: AppBar(title: const Text("data"),),
       body: Column(
         children: [
-          SizedBox(height: 20,),
-          Text("Data Succesfully added :)"),
-          SizedBox(height: 20,),
+          const SizedBox(height: 20,),
+          const Text("Data Succesfully added :)"),
+          const SizedBox(height: 20,),
           MaterialButton(
             color: Colors.black,
             child: const Text("GO Back", style: TextStyle(color: Colors.white)),
